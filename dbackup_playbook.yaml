@@ -1,3 +1,31 @@
 ---
 
+- name: Backup Cisco Devices
+  hosts: Cisco
+  connection: network_cli
+  gather_facts: false
+
+  vars:
+    backup_location: ./Documents/Device_Backup
+
+  tasks:
+    - name: Create Folder
+      file:
+        path: "{{ backup_location }}"
+        state: directory
+      run_once: yes
+
+    - name: Run Commands On Network Device
+      ios_command:
+        commands:
+          - show version
+          - show license
+          - show inventory
+          - show run
+        register: backup_config
+
+    - name: Store Config To Directory
+      copy:
+        src: "{{ backup_config.stdout[0] }}"
+        dest: "{{ backup_location }}/{{ backup_config}}"
 

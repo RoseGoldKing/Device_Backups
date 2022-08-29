@@ -1,0 +1,10 @@
+---
+
+# Default Login Credentials
+
+ansible_user: "<Enter Username>"
+ansible_ssh_pass: "<Enter SSH Password>"
+ansible_network_os: "<Network OS>"
+#Network OS: ios
+ansible_connection: "<Connection Type>"
+#Connection Type: localhost, network_cli

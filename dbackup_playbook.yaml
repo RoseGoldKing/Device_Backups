@@ -1,6 +1,6 @@
 ---
 
-- name: Backup Cisco Devices
+- name: Backup Devices Iformation For Devices
   hosts: Cisco
   connection: network_cli
   gather_facts: false
@@ -27,5 +27,27 @@
     - name: Store Config To Directory
       copy:
         src: "{{ backup_config.stdout[0] }}"
-        dest: "{{ backup_location }}/{{ backup_config}}"
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
+- name: Device Backup For Dell
+  hosts: Dell
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: Run Commands On Network Device
+      ios_command:
+        commands:
+          - show boot
+          - show version
+          - show license status
+          - show inventory
+          - show running-configuration
+        register: backup_config
+
+    - name: Store Config To Directory
+      copy:
+        src: "{{ backup_config.stdout[0] }}"
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
 

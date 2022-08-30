@@ -18,15 +18,16 @@
     - name: Run Commands On Network Device
       ios_command:
         commands:
+          - show boot
           - show version
           - show license
           - show inventory
-          - show run
-        register: backup_config
+          - show running-configuration
+        register: cisco_backup_config
 
     - name: Store Config To Directory
       copy:
-        src: "{{ backup_config.stdout[0] }}"
+        src: "{{ cisco_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
 
 - name: Device Backup For Dell
@@ -43,11 +44,11 @@
           - show license status
           - show inventory
           - show running-configuration
-        register: backup_config
+        register: dell_backup_config
 
     - name: Store Config To Directory
       copy:
-        src: "{{ backup_config.stdout[0] }}"
+        src: "{{ dell_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
 
 

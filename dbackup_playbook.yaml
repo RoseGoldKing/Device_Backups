@@ -51,4 +51,11 @@
         src: "{{ dell_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
 
+- name: Run Show Commands On Big IP F5
+  hosts: F5
+  connection: network_cli
+  gather_facts: false 
 
+  tasks:
+    - name: Run Commands On Big IP F5
+      

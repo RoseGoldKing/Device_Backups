@@ -16,7 +16,7 @@ rcs00oobs5306 ansible_host=
 
 
 
-[Big-IP]
+[F5]
 rcs00icpnot01 ansible_host=
 
 

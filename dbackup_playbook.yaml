@@ -2,7 +2,7 @@
 
 - name: Backup Devices Iformation For Devices
   hosts: Cisco
-  connection: network_cli
+  connection: 
   gather_facts: false
 
   vars:
@@ -16,12 +16,13 @@
       run_once: yes
 
     - name: Run Commands On Network Device
-      ios_command:
+      cisco.ios.ios_command:
         commands:
           - show boot
           - show version
           - show license
           - show inventory
+          - show hw-module all entity
           - show running-configuration
         register: cisco_backup_config
 

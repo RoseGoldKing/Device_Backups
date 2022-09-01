@@ -21,3 +21,12 @@ rcs00icpnot01 ansible_host=
 
 
 
+[PowerVault]
+<IP-Address>
+
+
+
+[NetApp]
+rcs07oobclu01 ansible_host=
+
+

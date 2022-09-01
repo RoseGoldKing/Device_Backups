@@ -1,8 +1,6 @@
 ---
-
-- name: Backup Devices Iformation For Devices
-  hosts: Cisco
-  connection: 
+- name: Prepare Folder For Backups
+  hosts: localhost
   gather_facts: false
 
   vars:
@@ -15,6 +13,9 @@
         state: directory
       run_once: yes
 
+- name: Backup Devices Iformation For Devices
+  hosts: Cisco
+  tasks:
     - name: Run Commands On Network Device
       cisco.ios.ios_command:
         commands:
@@ -33,12 +34,9 @@
 
 - name: Device Backup For Dell
   hosts: Dell
-  connection: network_cli
-  gather_facts: false
-
   tasks:
     - name: Run Commands On Network Device
-      ios_command:
+      dellemc.os10.os10_command:
         commands:
           - show boot
           - show version
@@ -55,9 +53,72 @@
 
 - name: Run Show Commands On Big IP F5
   hosts: F5
-  connection: network_cli
+  anisble_connection: local
+  tasks:
+    - name: CLI F5 Show Commands
+      f5networks.f5_modules.bigip_command:
+        commands:
+          - show sys hardware
+          - list net interface all-properties
+          - list net interface media-active vendor serial
+        register: f5_backup_config
+
+    - name: Store Config To Directory
+      copy:
+        src: "{{ f5_backup_config.stdout[0] }}"
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
+- name: Run Show Commands On PowerVault
+  hosts: PowerVault
+  ansible_connection: network_cli
   gather_facts: false 
+  tasks:
+    - name: CLI PowerVault Show Commands
+      dellemc.openmanage.idrac_system_info:
+        ome_device_info:
+          hostname: "<IP-ADDRESS>"
+          username: "emergency"
+          password: "password"
+          fact_subset: "basic_inventory"
+          system_query_options:
+        register: powervault_backup
+
+    - name: Store Config To Directory
+      copy:
+        src: "{{ powervault_backup.stdout[0] }}"
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+  
+- name: Run Commands On NetApp
+  hosts: NetApp
+  connection: network_cli
+  gather_facts: false
 
   tasks:
-    - name: Run Commands On Big IP F5
-      
+    - name: CLI Show Command
+      netapp.ontap.na_ontap_command:
+        hostname: "{{ hostname }}"
+        username: "{{ admin username }}"
+        password: "{{ admin password }}"
+        command: ['system show -instance', 'system license show-serial-numbers']
+        return_dict: true
+        commands:
+      register: NetApp_backup
+
+    - name: Store NetApp Config To Directory
+      copy:
+        src: "{{ NetApp_backup.stdout[0] }}"
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
+            
+
+
+
+
+
+
+
+
+
+
+
+...

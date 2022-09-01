@@ -43,6 +43,7 @@
           - show boot
           - show version
           - show license status
+          - show interface transceiver
           - show inventory
           - show running-configuration
         register: dell_backup_config

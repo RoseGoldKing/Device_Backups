@@ -1,4 +1,5 @@
 ---
+# Folder Creation
 - name: Prepare Folder For Backups
   hosts: localhost
   gather_facts: false
@@ -12,12 +13,12 @@
         path: "{{ backup_location }}"
         state: directory
       run_once: yes
-
+# Cisco Devices
 - name: Backup Devices Iformation For Devices
   hosts: Cisco
   tasks:
     - name: Run Commands On Network Device
-      cisco.ios.ios_command:
+      ios_command:
         commands:
           - show boot
           - show version
@@ -25,13 +26,15 @@
           - show inventory
           - show hw-module all entity
           - show running-configuration
-        register: cisco_backup_config
+      register: cisco_backup_config
 
     - name: Store Config To Directory
       copy:
         src: "{{ cisco_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+ 
 
+# Dell Devices
 - name: Device Backup For Dell
   hosts: Dell
   tasks:
@@ -50,16 +53,10 @@
       copy:
         src: "{{ dell_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
-
+# F5 
 - name: Run Show Commands On Big IP F5
   hosts: F5
-  anisble_connection: local
-  ansible_user: "username"
-  ansible password:
-  ansible_become: yes
-  ansible_become_method: enable
-  gather_facts: false
-  
+  connection: ansible.netcommon.network_cli
   tasks:
     - name: CLI F5 Show Commands
       f5networks.f5_modules.bigip_command:
@@ -73,10 +70,10 @@
       copy:
         src: "{{ f5_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
-
+# PowerVault
 - name: Run Show Commands On PowerVault
   hosts: PowerVault
-  ansible_connection: network_cli
+  connection: ansible.netcommon.network_cli
   gather_facts: false 
   tasks:
     - name: CLI PowerVault Show Commands
@@ -93,16 +90,11 @@
       copy:
         src: "{{ powervault_backup.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
-  
+  # NetApp
 - name: Run Commands On NetApp
   hosts: NetApp
-  ansible_connection: ansible.netcommon.network_cli
-  ansible_user: "username"
-  ansible password:
-  ansible_become: yes
-  ansible_become_method: enable
+  connection: ansible.netcommon.network_cli
   gather_facts: false
-
   tasks:
     - name: CLI Show Command
       netapp.ontap.na_ontap_command:

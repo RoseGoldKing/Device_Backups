@@ -1,32 +1,32 @@
 [Cisco]
-rcs00cpasr01 ansible_host=
-rcs00cpc9301 ansible_host=
-rcs00cpc9302 ansible_host=
-rcs00cpc9303 ansible_host=
+rcs00cpasr01 ansible_host= ansible_user= ansible_password=
+rcs00cpc9301 ansible_host= ansible_user= ansible_password=
+rcs00cpc9302 ansible_host= ansible_user= ansible_password=
+rcs00cpc9303 ansible_host= ansible_user= ansible_password=
 
 
 
 [Dell]
-rcs00oobs5301 ansible_host=
-rcs00oobs5302 ansible_host=
-rcs00oobs5303 ansible_host=
-rcs00oobs5304 ansible_host=
-rcs00oobs5305 ansible_host=
-rcs00oobs5306 ansible_host=
+rcs00oobs5301 ansible_host= ansible_user= ansible_password=
+rcs00oobs5302 ansible_host= ansible_user= ansible_password=
+rcs00oobs5303 ansible_host= ansible_user= ansible_password=
+rcs00oobs5304 ansible_host= ansible_user= ansible_password=
+rcs00oobs5305 ansible_host= ansible_user= ansible_password=
+rcs00oobs5306 ansible_host= ansible_user= ansible_password=
 
 
 
 [F5]
-rcs00icpnot01 ansible_host=
+rcs00icpnot01 ansible_host= ansible_user= ansible_password=
 
 
 
 [PowerVault]
-<IP-Address>
+<IP-Address> ansible_user= ansible_password=
 
 
 
 [NetApp]
-rcs07oobclu01 ansible_host=
+rcs07oobclu01 ansible_host= ansible_user= ansible_password=
 
 

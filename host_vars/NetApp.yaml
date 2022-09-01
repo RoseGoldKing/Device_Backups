@@ -1,0 +1,6 @@
+ansible_connection: ansible.netcommon.network_cli
+ansible_user: "username"
+ansible password:
+ansible_become: yes
+ansible_become_method: enable
+gather_facts: false

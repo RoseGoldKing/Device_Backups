@@ -54,6 +54,12 @@
 - name: Run Show Commands On Big IP F5
   hosts: F5
   anisble_connection: local
+  ansible_user: "username"
+  ansible password:
+  ansible_become: yes
+  ansible_become_method: enable
+  gather_facts: false
+  
   tasks:
     - name: CLI F5 Show Commands
       f5networks.f5_modules.bigip_command:
@@ -90,7 +96,11 @@
   
 - name: Run Commands On NetApp
   hosts: NetApp
-  connection: network_cli
+  ansible_connection: ansible.netcommon.network_cli
+  ansible_user: "username"
+  ansible password:
+  ansible_become: yes
+  ansible_become_method: enable
   gather_facts: false
 
   tasks:

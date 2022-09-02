@@ -1,4 +1,5 @@
 ---
+
 # Folder Creation
 - name: Prepare Folder For Backups
   hosts: localhost
@@ -13,27 +14,36 @@
         path: "{{ backup_location }}"
         state: directory
       run_once: yes
+
+
 # Cisco Devices
 - name: Backup Devices Iformation For Devices
   hosts: Cisco
+  gather_facts: false
   tasks:
+    
+    - name: get timestamp
+      command: date +%Y%m%d
+      register: timestamp
+
     - name: Run Commands On Network Device
-      ios_command:
+      cisco.ios.ios_command: 
         commands:
-          - show boot
+          - show bootvar
           - show version
-          - show license
           - show inventory
-          - show hw-module all entity
-          - show running-configuration
+          - show running-config
       register: cisco_backup_config
 
     - name: Store Config To Directory
       copy:
-        src: "{{ cisco_backup_config.stdout[0] }}"
-        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+        content:  | 
+          {{ cisco_backup_config.stdout[0] }}
+          {{ cisco_backup_config.stdout[1] }}
+          {{ cisco_backup_config.stdout[2] }}
+          {{ cisco_backup_config.stdout[3] }}
+        dest: "./Documents/Device_Backup/{{ inventory_hostname }}.{{ timestamp.stdout }}.txt"
  
-
 # Dell Devices
 - name: Device Backup For Dell
   hosts: Dell
@@ -53,6 +63,8 @@
       copy:
         src: "{{ dell_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
+
 # F5 
 - name: Run Show Commands On Big IP F5
   hosts: F5
@@ -70,6 +82,8 @@
       copy:
         src: "{{ f5_backup_config.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
+
 # PowerVault
 - name: Run Show Commands On PowerVault
   hosts: PowerVault
@@ -90,6 +104,8 @@
       copy:
         src: "{{ powervault_backup.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+
+
   # NetApp
 - name: Run Commands On NetApp
   hosts: NetApp

@@ -1,5 +1,11 @@
 [Cisco]
-R1 ansible_host=192.168.1.130
+<<<<<<<<< Temporary merge branch 1
+rcs00cpasr01 ansible_host= ansible_user= ansible_password=
+rcs00cpc9301 ansible_host= ansible_user= ansible_password=
+rcs00cpc9302 ansible_host= ansible_user= ansible_password=
+rcs00cpc9303 ansible_host= ansible_user= ansible_password=
+=========
+rcs01icpc3802 ansible_host=10.1.50.2 
 #rcs00cpc9301 ansible_host= ansible_user= ansible_password=
 #rcs00cpc9302 ansible_host= ansible_user= ansible_password=
 #rcs00cpc9303 ansible_host= ansible_user= ansible_password=

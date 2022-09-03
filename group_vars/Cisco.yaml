@@ -1,7 +1,7 @@
 ansible_connection: ansible.netcommon.network_cli
 ansible_network_os: cisco.ios.ios
 ansible_user: devihn.king.adm
-ansible_password: cisco
+ansible_password: "%ddBK8J%S49o&hh"
 ansible_become: yes
 ansible_become_method: enable
 ansible_become_password: cisco

@@ -5,9 +5,6 @@
   hosts: localhost
   gather_facts: false
 
-  vars:
-    backup_location: ./Documents/Device_Backup
-
   tasks:
     - name: Create Folder
       file:
@@ -21,10 +18,6 @@
   hosts: Cisco
   gather_facts: false
   tasks:
-    
-    - name: get timestamp
-      command: date +%Y%m%d
-      register: timestamp
 
     - name: Run Commands On Network Device
       cisco.ios.ios_command: 
@@ -42,7 +35,7 @@
           {{ cisco_backup_config.stdout[1] }}
           {{ cisco_backup_config.stdout[2] }}
           {{ cisco_backup_config.stdout[3] }}
-        dest: "./Documents/Device_Backup/{{ inventory_hostname }}.{{ timestamp.stdout }}.txt"
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.{{ timestamp.stdout }}.txt"
  
 # Dell Devices
 - name: Device Backup For Dell
@@ -59,10 +52,16 @@
           - show running-configuration
         register: dell_backup_config
 
-    - name: Store Config To Directory
+    - name: Store Dell Config To Directory
       copy:
-        src: "{{ dell_backup_config.stdout[0] }}"
-        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+        content:  | 
+          {{ dell_backup_config.stdout[0] }}
+          {{ dell_backup_config.stdout[1] }}
+          {{ dell_backup_config.stdout[2] }}
+          {{ dell_backup_config.stdout[3] }}
+          {{ dell_backup_config.stdout[4] }}
+          {{ dell_backup_config.stdout[5] }}
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.{{ timestamp.stdout }}.txt"
 
 
 # F5 
@@ -79,9 +78,11 @@
         register: f5_backup_config
 
     - name: Store Config To Directory
-      copy:
-        src: "{{ f5_backup_config.stdout[0] }}"
-        dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
+      content:  | 
+          {{ f5_backup_config.stdout[0] }}
+          {{ f5_backup_config.stdout[1] }}
+          {{ f5_backup_config.stdout[2] }}
+        dest: "{{ backup_location }}/{{ inventory_hostname }}.{{ timestamp.stdout }}.txt"
 
 
 # PowerVault
@@ -102,7 +103,7 @@
 
     - name: Store Config To Directory
       copy:
-        src: "{{ powervault_backup.stdout[0] }}"
+        content: "{{ powervault_backup.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
 
 
@@ -124,7 +125,7 @@
 
     - name: Store NetApp Config To Directory
       copy:
-        src: "{{ NetApp_backup.stdout[0] }}"
+        content: "{{ NetApp_backup.stdout[0] }}"
         dest: "{{ backup_location }}/{{ inventory_hostname }}.txt"
 
             

@@ -1,1 +1,9 @@
 ---
+- hosts: all
+  vars:
+    backup_location: ./Documents/Device_Backup
+
+  tasks:
+    - name: get timestamp
+      command: date +%Y%m%d
+      register: timestamp

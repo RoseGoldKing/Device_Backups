@@ -1,6 +1,6 @@
 ---
 
-# Folder Creation
+# Folder Creation For Backups
 - name: Prepare Folder For Backups
   hosts: localhost
   gather_facts: false
@@ -18,6 +18,9 @@
   hosts: Cisco
   gather_facts: false
   tasks:
+    - name: get timestamp
+      command: date +%Y%m%d
+      register: timestamp
 
     - name: Run Commands On Network Device
       cisco.ios.ios_command: 
@@ -78,7 +81,8 @@
         register: f5_backup_config
 
     - name: Store Config To Directory
-      content:  | 
+      copy:
+        content:  | 
           {{ f5_backup_config.stdout[0] }}
           {{ f5_backup_config.stdout[1] }}
           {{ f5_backup_config.stdout[2] }}
